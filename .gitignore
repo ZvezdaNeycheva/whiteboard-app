@@ -3,7 +3,8 @@
 
 # Docker files
 Dockerfile
-.dockerignore
+docker-compose.yml
+# .dockerignore
 
 # dependencies
 /node_modules
@@ -31,7 +32,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env*
 .env
 
 # vercel
@@ -44,3 +45,6 @@ next-env.d.ts
 # Operating system files
 .DS_Store
 Thumbs.db
+
+enhancements.md
+prod.md

@@ -1,0 +1,14 @@
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      CLIENT_ORIGIN: ${CLIENT_ORIGIN}
+      PORT: ${PORT}
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

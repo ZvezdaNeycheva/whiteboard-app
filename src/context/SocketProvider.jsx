@@ -1,4 +1,4 @@
-'use client' 
+'use client';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 
@@ -7,14 +7,35 @@ const SocketContext = createContext(null);
 export const SocketProvider = ({ children }) => {
     const socketRef = useRef(null);
     const [isReady, setIsReady] = useState(false);
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+    const [socketUrl, setSocketUrl] = useState(null);
 
     useEffect(() => {
-        socketRef.current = io(socketUrl, { reconnection: true });
+        const getSocketUrl = async () => {
+            try {
+                const res = process.env.NEXT_PUBLIC_SOCKET_URL
+                setSocketUrl(res);
+            } catch (err) {
+                console.error('Failed to fetch socket URL:', err);
+            }
+        };
+
+        getSocketUrl();
+    }, []);
+
+    // Initialize socket once socketUrl is available
+    useEffect(() => {
+        if (!socketUrl) {
+            console.warn('No socketUrl yet');
+            return;
+        }
+
+        socketRef.current = io(socketUrl, {
+            transports: ["websocket"], // avoid long-polling fallback
+            reconnection: true
+        });
 
         socketRef.current.on('connect', () => {
-            console.log(`Socket connected with ID: ${socketRef.current.id}`);
-            setIsReady(true); // trigger re-render only after connection
+            setIsReady(true);
         });
 
         socketRef.current.on('connect_error', (err) => {
@@ -22,12 +43,13 @@ export const SocketProvider = ({ children }) => {
         });
 
         return () => {
-            socketRef.current.disconnect();
-            console.log('Socket disconnected');
+            socketRef.current?.disconnect();
         };
     }, [socketUrl]);
 
-    if (!isReady) return null; // or loading UI
+    if (!isReady) {
+        return <LoadingUI />;
+    }
 
     return (
         <SocketContext.Provider value={socketRef}>
@@ -39,3 +61,7 @@ export const SocketProvider = ({ children }) => {
 export const useSocketConnection = () => {
     return useContext(SocketContext);
 };
+
+const LoadingUI = () => (
+    <div>Connecting to server...</div>
+);

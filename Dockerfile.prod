@@ -1,0 +1,17 @@
+FROM node:18-bullseye-slim
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY server ./server
+
+ARG CLIENT_ORIGIN
+
+ENV PORT=3000
+ENV NODE_ENV=production
+ENV CLIENT_ORIGIN=$CLIENT_ORIGIN
+
+EXPOSE 3000
+CMD ["npm", "start"]
+

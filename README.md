@@ -13,6 +13,7 @@ This project is a **Collaborative Whiteboard Application** built using **Next.js
 
 **Whiteboard**
   - Draw with pen, eraser, line, rectangle, circle, triangle.
+  - Change color.
   - Fill mode toggle for shapes.
   - Undo/Redo (with Socket.io support).
   - Save and load drawings as images (registered users only).
@@ -48,10 +49,12 @@ This project is a **Collaborative Whiteboard Application** built using **Next.js
   - **React**
   - **Socket.IO** 
   - **Recoil**
+  - **HTML Canvas**
 
 - **Backend**: 
   - **Firebase** 
   - **Next.js API Routes**: Provides serverless API endpoints, adhering to REST principles
+  - **Socket.IO** 
 
 - **Containerization**: 
   - **Docker**
@@ -77,7 +80,15 @@ To get started with this project, follow the steps below:
     Create a .env file in the root directory and add any necessary environment variables: <br/>
     PORT<br/>
     NODE_ENV<br/>
-    NEXT_PUBLIC_SOCKET_URL
+    NEXT_PUBLIC_SOCKET_URL<br/>
+    CLIENT_ORIGIN<br/>
+    NEXT_PUBLIC_FIREBASE_API_KEY<br/>
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN<br/>
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID<br/>
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET<br/>
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID<br/>
+    NEXT_PUBLIC_FIREBASE_APP_ID<br/>
+    NEXT_PUBLIC_FIREBASE_DATABASE_URL<br/>
 
 2. **Run the application**:<br/>
 ```bash
@@ -93,3 +104,4 @@ The application will start on http://localhost:3000 or on whichever PORT you are
 
 - Users can draw on the board, and all actions will be synced in real time with other connected users in the board.
 - The application require authentication. Ensure to log in to access all features. A registered user has more features than a guest.
+- Guests & their boards are deleted on logout.
