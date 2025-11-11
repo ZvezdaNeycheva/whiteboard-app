@@ -29,11 +29,16 @@ jobs:
       - name: Merge upstream changes (excluding workflows)
         run: |
           git checkout main
-          git merge upstream/main --allow-unrelated-histories --no-commit || true
+          # Create a temporary branch to merge
+          git checkout -b temp-merge
+          git merge upstream/main --allow-unrelated-histories -m "Sync from upstream" || true
           # Remove workflow files from the merge
-          git restore --staged .github/workflows/
-          git checkout -- .github/workflows/
-          git commit -m "Sync from upstream (excluding workflow files)" || true
+          git rm -r --cached .github/workflows || true
+          git commit -m "Remove workflow files from merge" || true
+          # Merge back to main
+          git checkout main
+          git merge temp-merge --ff-only
+          git branch -D temp-merge
 
       - name: Push changes to fork
         run: git push origin main
