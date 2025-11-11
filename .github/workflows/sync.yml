@@ -1,5 +1,9 @@
 name: Sync Collaborative Whiteboard App with Upstream
 
+permissions:
+  contents: write
+  workflows: write
+  
 on:
   workflow_dispatch:
 
